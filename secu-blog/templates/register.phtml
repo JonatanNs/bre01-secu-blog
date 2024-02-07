@@ -1,0 +1,53 @@
+<?php 
+function generateCSRFToken() : string{
+    $token = bin2hex(random_bytes(32));
+return $token;
+}
+    $token = generateCSRFToken();
+    $_SESSION['csrf_token'] = $token;
+?>
+<main id="register" class="container py-5 px-3">
+    <h1 class="mb-5">Secured Blog</h1>
+
+    <h2 class="mt-5">Register</h2>
+
+    <form action="index.php?route=check-register" method="post">
+        <input type="hidden" name="csrf-token" id="csrf-token" value="<?= $_SESSION['csrf_token'] ?>" />
+        <input type="hidden" name="dateTime" id="dateTime" value=" <?= date("Y-m-d H:i:s") ?>" />
+        <fieldset class="my-1">
+            <label for="username" class="form-label">
+                Username
+            </label>
+            <input type="text" name="username" id="username" class="form-control"/>
+        </fieldset>
+        <fieldset class="my-1">
+            <label for="email" class="form-label">
+                Email
+            </label>
+            <input type="email" name="email" id="email" class="form-control"/>
+        </fieldset>
+        <fieldset class="my-1">
+            <label for="password" class="form-label">
+                Password
+            </label>
+            <input type="password" name="password" id="password" class="form-control" />
+        </fieldset>
+        <fieldset class="my-1">
+            <label for="confirm-password" class="form-label">
+                Confirm password
+            </label>
+            <input type="password" name="confirm-password" id="confirm-password"  class="form-control"/>
+        </fieldset>
+        <fieldset>
+            <button type="submit" class="btn btn-primary" name="register-submit">Register</button>
+        </fieldset>
+    </form>
+    <?php
+    // Afficher le message d'erreur s'il est présent dans la session
+    if(isset($_SESSION['errorRegister'])) {
+        echo "<p>" . $_SESSION['errorRegister'] . "</p>";
+        // Supprimer le message d'erreur de la session après l'avoir affiché
+        unset($_SESSION['errorRegister']);
+    }
+?>
+</main>
